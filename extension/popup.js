@@ -74,6 +74,12 @@ function handleFormSubmit(actionToken, event) {
   if (shareCheckboxNode.checked) {
     addParam('title', shareData.title);
     addParam('url', shareData.url);
+    if (shareData.snippet) {
+      addParam('snippet', shareData.snippet);
+    }
+    if (shareData.srcTitle) {
+      addParam('srcTitle', shareData.srcTitle);
+    }
   }
 
   var xhr = new XMLHttpRequest();
