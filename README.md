@@ -1,4 +1,4 @@
-Chrome extension that replaces the old (pre-October 2011) "Note in Reader" experience.
+Chrome extension that recreates the old (pre-October 2011) "Note in Reader" experience.
 
 Supports two modes:
 
