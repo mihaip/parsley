@@ -120,7 +120,7 @@ function getShareData(callback) {
         tab.url.indexOf('https://www.google.com/reader/') == 0) {
       getReaderShareData(tab, callback);
     } else {
-      callback({url: tab.url, title: tab.title});
+      getGenericShareData(tab, callback, {url: tab.url, title: tab.title});
     }
   }
 }
@@ -138,6 +138,20 @@ function getReaderShareData(tab, callback) {
   chrome.tabs.executeScript(
       tab.id, {runAt: 'document_start', file: 'reader-share-data.js'});
 }
+
+function getGenericShareData(tab, callback, shareData) {
+  chrome.extension.onMessage.addListener(
+      function genericMessageListener(request, sender, sendResponse) {
+        for (var key in request) {
+          shareData[key] = request[key];
+        }
+        callback(shareData);
+        chrome.extension.onMessage.removeListener(genericMessageListener);
+      });
+  chrome.tabs.executeScript(
+      tab.id, {runAt: 'document_start', file: 'generic-share-data.js'});
+}
+
 
 function closePopup() {
   window.close();
