@@ -1,7 +1,8 @@
-Chrome extension that lets you quickly post (and share links to) to [Avocado](https://avocado.io).
+Chrome extension that replaces the old (pre-October 2011) "Note in Reader" experience.
 
-Uses [Avocado's API](https://avocado.io/guacamole/avocado-api) to post. For credentials, it uses the account that you're currently signed into the browser with.
+Supports two modes:
 
-When sharing from a [Google Reader](http://reader.google.com/) tab, the currently selected item's link is used instead.
+1. If the current item is a Google Reader tab, and it has an item selected, that item's title/URL/body will be used as the data to note.
+1. For all other web pages, the current page's URL, title (and selection, if any) will be used as the data to note.
 
-Available in the Chrome Web Store at [https://chrome.google.com/webstore/detail/kkfoaclholjephhdhmaoeabajfnbeheo](https://chrome.google.com/webstore/detail/kkfoaclholjephhdhmaoeabajfnbeheo).
+Available in the Chrome Web Store at [https://chrome.google.com/webstore/detail/ilnbkghleppkefmlddmkgmlcfgomgnbj](https://chrome.google.com/webstore/detail/ilnbkghleppkefmlddmkgmlcfgomgnbj) to [trusted testers](groups.google.com/group/parsley-trusted-testers) only.
