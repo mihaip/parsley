@@ -6,4 +6,14 @@ if (window.getSelection().rangeCount) {
   }
 }
 
+if (!shareData.snippet) {
+  var metaDescriptionNode = document.querySelector('meta[name="description"]');
+  if (metaDescriptionNode) {
+    var description = metaDescriptionNode.getAttribute('content');
+    if (description) {
+      shareData.snippet = description;
+    }
+  }
+}
+
 chrome.extension.sendMessage(shareData);
