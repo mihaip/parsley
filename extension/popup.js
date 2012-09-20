@@ -7,6 +7,7 @@ var shareCheckboxNode = $('share-checkbox');
 var shareLinkNode = $('share-link');
 var statusMessageNode = $('status-message');
 var statusSubMessageNode = $('status-sub-message');
+var tagListNode = $('tag-list');
 var shareData;
 
 var closingElements = document.querySelectorAll('.close');
@@ -14,12 +15,17 @@ for (var i = 0, closingEl; closingEl = closingElements[i]; i++) {
   closingEl.addEventListener('click', closePopup);
 }
 
-if (window.devicePixelRatio >= 1.5) {
-  document.body.classList.add('retina');
-}
-
 getActionToken(function(actionToken) {
-  postingFormNode.onsubmit = handleFormSubmit.bind(this, actionToken);
+  getTagList(function(tagList) {
+    tagList.forEach(function(tag) {
+      var tagOptionNode = document.createElement('option');
+      tagOptionNode.value = tag;
+      tagOptionNode.textContent = tag;
+      tagListNode.appendChild(tagOptionNode);
+    });
+
+    postingFormNode.onsubmit = handleFormSubmit.bind(this, actionToken);
+  });
 });
 
 getShareData(function(loadedShareData) {
@@ -51,7 +57,7 @@ function handleFormSubmit(actionToken, event) {
   addParam('T', actionToken);
   addParam('annotation', noteNode.value);
   addParam('share', false);
-  addParam('tags', 'user/-/label/forannie');
+  addParam('tags', 'user/-/label/' + tagListNode.value);
 
   if (shareCheckboxNode.checked) {
     addParam('title', shareData.title);
@@ -138,6 +144,31 @@ function getActionToken(callback) {
   };
   xhr.onerror = handleGoogleReaderApiFailure.bind(this, xhr);
   xhr.open('GET', 'https://www.google.com/reader/api/0/token', true);
+  xhr.send();
+}
+
+var TAG_RE = /user\/\d+\/label\/(.+)/;
+
+function getTagList(callback) {
+  var xhr = new XMLHttpRequest();
+  xhr.onload = function() {
+    if (xhr.status != 200) {
+      handleGoogleReaderApiFailure(xhr);
+      return;
+    }
+
+    var responseJson = JSON.parse(xhr.responseText);
+    var tags = [];
+    responseJson.tags.forEach(function(tag) {
+      var match = TAG_RE.exec(tag.id);
+      if (match) {
+        tags.push(match[1]);
+      }
+    });
+    callback(tags);
+  };
+  xhr.onerror = handleGoogleReaderApiFailure.bind(this, xhr);
+  xhr.open('GET', 'https://www.google.com/reader/api/0/tag/list?output=json', true);
   xhr.send();
 }
 
