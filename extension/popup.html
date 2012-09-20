@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Cilantro</title>
+  <title>Parsley</title>
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
 <div id="content">
-  <h1>Send to Avocado</h1>
+  <h1>Tag in Google Reader</h1>
 
   <div id="status">
     <div id="status-message"></div>
@@ -16,19 +16,18 @@
   </div>
 
   <form id="posting-form">
-    <textarea id="note" placeholder="Add a comment"></textarea>
+    <textarea id="note" placeholder="Add note"></textarea>
 
     <label id="share-container">
       <input type="checkbox" id="share-checkbox">
-      Share "<a id="share-link" target="_blank"></a>"
+      Include "<a id="share-link" target="_blank"></a>"
     </label>
 
     <div id="buttons">
       <span class="close">Cancel</span>
-      <input type="submit" value="Send">
+      <input type="submit" value="Tag">
     </div>
   </form>
-  <img src="popup-logo.png" id="logo" width="82" height="82" alt="Cilantro logo">
 </div>
 <script src="popup.js"></script>
 </body>
