@@ -18,8 +18,8 @@ if (window.devicePixelRatio >= 1.5) {
   document.body.classList.add('retina');
 }
 
-getSignature(function(signature) {
-  postingFormNode.onsubmit = handleFormSubmit.bind(this, signature);
+getActionToken(function(actionToken) {
+  postingFormNode.onsubmit = handleFormSubmit.bind(this, actionToken);
 });
 
 getShareData(function(loadedShareData) {
@@ -37,30 +37,44 @@ getShareData(function(loadedShareData) {
   }
 });
 
-function handleFormSubmit(signature, event) {
+function handleFormSubmit(actionToken, event) {
   event.preventDefault();
 
-  var note = noteNode.value;
+  var params = '';
+  function addParam(name, value) {
+    if (params) {
+      params += '&';
+    }
+    params += encodeURIComponent(name) + '=' + encodeURIComponent(value);
+  }
+
+  addParam('T', actionToken);
+  addParam('annotation', noteNode.value);
+  addParam('share', false);
+  addParam('tags', 'user/-/label/forannie');
 
   if (shareCheckboxNode.checked) {
-    note += '\n' + shareData.title + ' - ' + shareData.url;
+    addParam('title', shareData.title);
+    addParam('url', shareData.url);
   }
 
   var xhr = new XMLHttpRequest();
   xhr.onload = function() {
-    setStatus('Hooray! Sent to Avocado!');
+    if (xhr.status != 200) {
+      handleGoogleReaderApiFailure(xhr);
+      return;
+    }
+    setStatus('Hooray! Sent to Google Reader!');
     setTimeout(function() {window.close()}, 1000);
   };
-  xhr.onerror = function() {
-    setStatus('Failure: ' + xhr.responseText);
-  };
+  xhr.onerror = handleGoogleReaderApiFailure.bind(this, xhr);
 
   xhr.open(
       'POST',
-      'https://avocado.io/api/conversation?avosig=' + encodeURIComponent(signature),
+      'https://www.google.com/reader/api/0/item/edit',
       true);
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  xhr.send('message=' + encodeURIComponent(note));
+  xhr.send(params);
 }
 
 function getShareData(callback) {
@@ -101,35 +115,34 @@ function getReaderShareData(tab, callback) {
       tab.id, {runAt: 'document_start', file: 'reader-share-data.js'});
 }
 
-var SIGNATURE_RE = /var\s+apiSignature\s+=\s+"(.+)";/m;
-
 function closePopup() {
   window.close();
 }
 
-function getSignature(callback) {
+function getActionToken(callback) {
   var xhr = new XMLHttpRequest();
   xhr.onload = function() {
-    var match = SIGNATURE_RE.exec(xhr.responseText);
-    if (!match) {
-      setStatus('Not logged into Avocado',
-        'Oopsie, looks like you need to be logged into Avocado before you can send links with Cilantro.');
-      var closeButton = document.querySelector('#status .close');
-      closeButton.textContent = 'Login';
-      closeButton.removeEventListener('click', closePopup);
-      closeButton.addEventListener('click', function() {
-        window.open('https://avocado.io/login');
-      });
+    if (xhr.status == 200) {
+      callback(xhr.responseText.trim());
       return;
     }
 
-    callback(match[1]);
+    setStatus('Not logged into Google Reader',
+      'Oopsie, looks like you need to be logged into Google Reader before you can send links with Parsley.');
+    var closeButton = document.querySelector('#status .close');
+    closeButton.textContent = 'Login';
+    closeButton.removeEventListener('click', closePopup);
+    closeButton.addEventListener('click', function() {
+      window.open('https://reader.google.com');
+    });
   };
-  xhr.onerror = function() {
-    setStatus('Avocado signature XHR error.' + xhr.responseText);
-  };
-  xhr.open('GET', 'https://avocado.io/=/', true);
+  xhr.onerror = handleGoogleReaderApiFailure.bind(this, xhr);
+  xhr.open('GET', 'https://www.google.com/reader/api/0/token', true);
   xhr.send();
+}
+
+function handleGoogleReaderApiFailure(xhr) {
+  setStatus('Google Reader API error: ' + xhr.status, xhr.responseText);
 }
 
 function setStatus(message, opt_subMessage) {
