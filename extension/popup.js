@@ -1,3 +1,5 @@
+var LAST_USED_TAG_KEY = 'last-used-tag';
+
 $ = document.getElementById.bind(document);
 
 var postingFormNode = $('posting-form');
@@ -17,14 +19,21 @@ for (var i = 0, closingEl; closingEl = closingElements[i]; i++) {
 
 getActionToken(function(actionToken) {
   getTagList(function(tagList) {
-    tagList.forEach(function(tag) {
-      var tagOptionNode = document.createElement('option');
-      tagOptionNode.value = tag;
-      tagOptionNode.textContent = tag;
-      tagListNode.appendChild(tagOptionNode);
-    });
+    chrome.storage.sync.get(LAST_USED_TAG_KEY, function(storageData) {
+      var lastUsedTag = storageData[LAST_USED_TAG_KEY];
 
-    postingFormNode.onsubmit = handleFormSubmit.bind(this, actionToken);
+      tagList.forEach(function(tag) {
+        var tagOptionNode = document.createElement('option');
+        tagOptionNode.value = tag;
+        tagOptionNode.textContent = tag;
+        if (tag == lastUsedTag) {
+          tagOptionNode.selected = true;
+        }
+        tagListNode.appendChild(tagOptionNode);
+      });
+
+      postingFormNode.onsubmit = handleFormSubmit.bind(this, actionToken);
+    });
   });
 });
 
@@ -44,6 +53,10 @@ getShareData(function(loadedShareData) {
 });
 
 function handleFormSubmit(actionToken, event) {
+  var storageData = {};
+  storageData[LAST_USED_TAG_KEY] = tagListNode.value;
+  chrome.storage.sync.set(storageData);
+
   event.preventDefault();
 
   var params = '';
@@ -58,7 +71,6 @@ function handleFormSubmit(actionToken, event) {
   addParam('annotation', noteNode.value);
   addParam('share', false);
   addParam('tags', 'user/-/label/' + tagListNode.value);
-
   if (shareCheckboxNode.checked) {
     addParam('title', shareData.title);
     addParam('url', shareData.url);
