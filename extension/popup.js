@@ -4,6 +4,7 @@ $ = document.getElementById.bind(document);
 
 var postingFormNode = $('posting-form');
 var noteNode = $('note');
+var noteMirrorNode = document.querySelector('#note-container span');
 var shareContainerNode = $('share-container');
 var shareCheckboxNode = $('share-checkbox');
 var shareLinkNode = $('share-link');
@@ -16,6 +17,11 @@ var closingElements = document.querySelectorAll('.close');
 for (var i = 0, closingEl; closingEl = closingElements[i]; i++) {
   closingEl.addEventListener('click', closePopup);
 }
+
+noteNode.addEventListener('input', function() {
+ noteMirrorNode.textContent = noteNode.value;
+});
+noteMirrorNode.textContent = noteNode.value;
 
 getActionToken(function(actionToken) {
   getTagList(function(tagList) {
