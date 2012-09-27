@@ -18,6 +18,10 @@ for (var i = 0, closingEl; closingEl = closingElements[i]; i++) {
   closingEl.addEventListener('click', closePopup);
 }
 
+// Mirror the contents of the text area so that the container node is as big
+// as the text's height, which in turn makes the textarea's height be as big as
+// its contents. For more details, see
+// http://www.alistapart.com/articles/expanding-text-areas-made-elegant/
 noteNode.addEventListener('input', function() {
  noteMirrorNode.textContent = noteNode.value;
 });

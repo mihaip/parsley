@@ -51,14 +51,13 @@ input[type="submit"] {
   text-shadow: 0px 1px 1px rgba(0,0,0,0.6);
 }
 
-
-/* Resizable textarea, see http://www.alistapart.com/articles/expanding-text-areas-made-elegant/ */
+/* Expanding textarea, see http://www.alistapart.com/articles/expanding-text-areas-made-elegant/ */
 #note-container {
   position: relative;
   border: solid 1px #ccc;
   border-radius: 3px;
   background: #fff;
-  width: 345px;
+  width: 350px;
   margin: 9px 0;
 }
 
@@ -69,7 +68,7 @@ input[type="submit"] {
   font-weight: inherit;
   line-height: inherit;
   margin: 0;
-  padding: 5px;
+  padding: 6px;
   background: transparent;
   /* Make the text soft-wrap */
   white-space: pre-wrap;
