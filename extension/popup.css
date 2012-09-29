@@ -110,6 +110,30 @@ input[type="submit"] {
   margin-left: 20px;
 }
 
+#close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border-radius: 10px;
+  width: 17px;
+  height: 17px;
+  font-size: 15px;
+  line-height: 17px;
+  background: #fff;
+  color: #000;
+  text-align: center;
+  opacity: .5;
+}
+
+#close:hover {
+  opacity: .9;
+}
+
+#close:focus {
+  outline: 0;
+  opacity: .9;
+}
+
 #tag-list {
   -webkit-appearance: none;
   font-weight: bold;
@@ -122,10 +146,6 @@ input[type="submit"] {
   width: 80px;
 }
 
-#tag-list:focus {
-  outline: 0;
-}
-
 #status {
   display: none;
   text-align: center;
@@ -134,7 +154,8 @@ input[type="submit"] {
   margin-top: 48px;
 }
 .has-status h1,
-.has-status #posting-form {
+.has-status #posting-form,
+.has-status #close {
   display: none;
 }
 .has-status #status {

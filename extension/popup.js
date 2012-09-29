@@ -13,9 +13,24 @@ var statusSubMessageNode = $('status-sub-message');
 var tagListNode = $('tag-list');
 var shareData;
 
+// Make pressing escape close the popup.
+document.body.addEventListener('keypress', function(event) {
+  if (event.keyCode == 96) {
+    closePopup();
+  }
+});
+
 var closingElements = document.querySelectorAll('.close');
 for (var i = 0, closingEl; closingEl = closingElements[i]; i++) {
   closingEl.addEventListener('click', closePopup);
+  // For <span>s and <div>s with a tabindex, pressing space or enter does
+  // not trigger their onclick handler (http://crbug.com/122652), so we have to
+  // do it manually.
+  closingEl.addEventListener('keypress', function(event) {
+    if (event.keyCode == 32 || event.keyCode == 13) {
+      closePopup();
+    }
+  });
 }
 
 // Mirror the contents of the text area so that the container node is as big

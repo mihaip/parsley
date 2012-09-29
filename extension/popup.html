@@ -7,6 +7,8 @@
 </head>
 <body>
 <div id="content">
+  <div id="close" class="close" tabindex="4">&#10005;</div>
+
   <h1>Tag in Google Reader</h1>
 
   <div id="status">
@@ -18,18 +20,17 @@
   <form id="posting-form">
     <div id="note-container">
       <pre><span></span><br></pre>
-      <textarea id="note" placeholder="Add note"></textarea>
+      <textarea id="note" placeholder="Add note" tabindex="1"></textarea>
     </div>
 
     <label id="share-container">
-      <input type="checkbox" id="share-checkbox">
-      Include "<a id="share-link" target="_blank"></a>"
+      <input type="checkbox" id="share-checkbox" tabindex="5">
+      Include "<a id="share-link" target="_blank" tabindex="6"></a>"
     </label>
 
     <div id="buttons">
-      <span class="close">Cancel</span>
-      <input type="submit" value="Tag">
-      with <select id="tag-list"></select>
+      <input type="submit" value="Tag" tabindex="2">
+      with <select id="tag-list" tabindex="3"></select>
     </div>
   </form>
 </div>
