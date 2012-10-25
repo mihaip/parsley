@@ -11,6 +11,7 @@ var shareLinkNode = $('share-link');
 var statusMessageNode = $('status-message');
 var statusSubMessageNode = $('status-sub-message');
 var tagListNode = $('tag-list');
+var starCheckboxNode = $('star-checkbox');
 var shareData;
 
 // Make pressing escape close the popup.
@@ -96,6 +97,9 @@ function handleFormSubmit(actionToken, event) {
   addParam('annotation', noteNode.value);
   addParam('share', false);
   addParam('tags', 'user/-/label/' + tagListNode.value);
+  if (starCheckboxNode.checked) {
+    addParam('tags', 'user/-/state/com.google/starred');
+  }
   if (shareCheckboxNode.checked) {
     addParam('title', shareData.title);
     addParam('url', shareData.url);
